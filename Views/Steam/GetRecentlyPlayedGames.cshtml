@@ -1,0 +1,29 @@
+﻿@model List<SteamGameStatistics.Models.Steam.Game>
+
+@{
+    ViewData["Title"] = "GetRecentlyPlayedGames";
+}
+
+<div class="table-responsive">
+    <h4>List of recently played games</h4>
+    <hr />
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Total Playtime</th>
+            <th>Logo</th>
+        </tr>
+
+        @foreach (var game in Model)
+        {
+            <tr>
+                <td>@game.Appid</td>
+                <td>@game.Name</td>
+                <td>@game.PlaytimeForever</td>
+                <td><img src="@Url.Content(game.GetIconUrl())"></td>
+            </tr>
+        }
+
+    </table>
+</div>
