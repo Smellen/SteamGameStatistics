@@ -6,9 +6,9 @@ namespace SteamGameStatistics.Interfaces
 {
     public interface ISteamService
     {
-        Task<User> GetSteamUser(string steamId);
-        Task<List<Game>> GetRecentlyPlayedGames(string steamId);
-        Task<List<Game>> GetAllGamesFromSteam();
+        Task<User> GetSteamUser();
+        Task<List<Game>> GetRecentlyPlayedGames();
+        Task<bool> GetAllGamesFromSteam();
         Task<List<Game>> LoadAllGamesFromFile();
     }
 }

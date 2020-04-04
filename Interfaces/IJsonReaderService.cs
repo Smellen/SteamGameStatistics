@@ -6,6 +6,6 @@ namespace SteamGameStatistics.Interfaces
 {
     public interface IJsonReaderService
     {
-        Task<List<Game>> GetGamesFromFile();
+        Task<List<Game>> GetGamesFromFile(string sort);
     }
 }
