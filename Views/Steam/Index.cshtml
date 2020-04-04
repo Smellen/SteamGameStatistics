@@ -19,6 +19,9 @@
         <input type="submit" value="Get recently played games" />
     }
 
-    @Html.ActionLink("All the games!", "DisplayAllGames", "Steam", new { sortOrder = "ac-count" }, htmlAttributes: new { @class= "btn btn-labeled btn-info" })
+    @Html.ActionLink("All the games!", "DisplayAllGames", "Steam", new { sortOrder = "ac-count" }, htmlAttributes: new { @class = "btn btn-labeled btn-info" })
+
+
+    @Html.ActionLink("Load new games again", "LoadAllGames", "Steam", htmlAttributes: new { @class = "btn btn-labeled btn-info" })
 </div>
 

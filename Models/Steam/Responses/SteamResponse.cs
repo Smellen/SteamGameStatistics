@@ -2,13 +2,13 @@
 
 namespace SteamGameStatistics.Models.Steam.Responses
 {
-    public class RecentlyPlayedGames
+    public class SteamResponse
     {
         [JsonPropertyName("response")]
-        public RecentlyPlayedGamesResponse Response { get; set; }
+        public ListOfGamesResponse Response { get; set; }
     }
 
-    public class RecentlyPlayedGamesResponse
+    public class ListOfGamesResponse
     {
         [JsonPropertyName("total_count")]
         public long TotalCount { get; set; }

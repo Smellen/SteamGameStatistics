@@ -8,5 +8,7 @@ namespace SteamGameStatistics.Interfaces
     {
         Task<User> GetSteamUser(string steamId);
         Task<List<Game>> GetRecentlyPlayedGames(string steamId);
+        Task<List<Game>> GetAllGamesFromSteam();
+        Task<List<Game>> LoadAllGamesFromFile();
     }
 }
