@@ -54,5 +54,11 @@ namespace SteamGameStatistics.Controllers
 
             return View(sortedGames);
         }
+
+        public async Task<ActionResult> LoadAllGames()
+        {
+            var games = await _steamService.LoadAllGamesFromFile();
+            return View(games.OrderByDescending(e => e.PlaytimeForever).ToList());
+        }
     }
 }
