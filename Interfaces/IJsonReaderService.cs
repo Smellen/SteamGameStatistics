@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using SteamGameStatistics.Models.Json;
 
 namespace SteamGameStatistics.Interfaces
 {
     public interface IJsonReaderService
     {
-        Task<List<Game>> GetGamesFromFile(string sort);
+        Task<List<Models.Json.Game>> LoadGamesWithAchievementsFromFile(string sort);
+        Task<List<Models.Steam.Game>> LoadAllGamesFromFile();
     }
 }
