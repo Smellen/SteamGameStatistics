@@ -45,7 +45,7 @@ namespace SteamGameStatistics.Models.Steam
             return $"http://media.steampowered.com/steamcommunity/public/images/apps/{Appid}/{ImgLogoUrl}.jpg";
         }
 
-        public string GetTotalPlaytime()
+        public string GetTotalGamePlaytime()
         {
             TimeSpan time = TimeSpan.FromMinutes(PlaytimeForever);
             return $"{Math.Round(time.TotalHours, 2)} hours";

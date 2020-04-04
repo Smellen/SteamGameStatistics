@@ -2,9 +2,18 @@
 
 @{
     ViewData["Title"] = "LoadAllGames";
+    var totalPlaytime = Model.Sum(e => (double)e.PlaytimeForever);
+    var totalPlaytimeRounded = Math.Round(TimeSpan.FromMinutes(totalPlaytime).TotalHours, 2);
 }
 
+
 <h1>All Games</h1>
+<ul style="list-style-type:none;">
+    <li>Total Games: @Model.ToList().Count</li>
+    <li>Total Played Games: @Model.Where(e => e.PlaytimeForever > 0).ToList().Count</li>
+    <li>Total Unplayed Games: @Model.Where(e => e.PlaytimeForever <= 0).ToList().Count</li>
+    <li>Total Playtime: @totalPlaytimeRounded</li>
+</ul>
 
 <table class="table">
     <thead>
@@ -27,24 +36,25 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Appid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @item.GetLastTwoWeeksPlaytime()
-            </td>
-            <td>
-                @item.GetTotalPlaytime()
-            </td>
-            <td>
-                <img src="@Url.Content(item.GetIconUrl())">
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Appid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @item.GetLastTwoWeeksPlaytime()
+                </td>
+                <td>
+                    @item.GetTotalGamePlaytime()
+                </td>
+                <td>
+                    <img src="@Url.Content(item.GetIconUrl())">
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
