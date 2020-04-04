@@ -36,13 +36,13 @@ namespace SteamGameStatistics.Controllers
 
         public async Task<ActionResult> DisplayAllGames(string sortOrder)
         {
-            var sortedGames = await _jsonReaderService.GetGamesFromFile(sortOrder);
+            var sortedGames = await _jsonReaderService.LoadGamesWithAchievementsFromFile(sortOrder);
             return View(sortedGames);
         }
 
         public async Task<ActionResult> LoadAllGames()
         {
-            var games = await _steamService.LoadAllGamesFromFile();
+            var games = await _jsonReaderService.LoadAllGamesFromFile();
             return View(games.OrderByDescending(e => e.PlaytimeForever).ToList());
         }
     }

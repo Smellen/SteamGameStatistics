@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using SteamGameStatistics.Interfaces;
 using SteamGameStatistics.Models.Steam;
 using SteamGameStatistics.Models.Steam.Responses;
@@ -27,6 +28,7 @@ namespace SteamGameStatistics.Services
         /// Get a steam user.
         /// </summary>
         /// <returns>A steam user.</returns>
+        [OutputCache(Duration = 86400, VaryByParam = "none")]
         public async Task<User> GetSteamUser()
         {
             User user = null;
@@ -76,7 +78,7 @@ namespace SteamGameStatistics.Services
                 {
                     if (response.IsSuccessStatusCode)
                     {
-                        string fileToWriteTo = $"all-games-{DateTime.UtcNow:dd-M-yyyy}";
+                        string fileToWriteTo = $"all-games";
                         using (Stream streamToWriteTo = File.Open(fileToWriteTo, FileMode.Create))
                         {
                             await streamToReadFrom.CopyToAsync(streamToWriteTo);
@@ -96,35 +98,6 @@ namespace SteamGameStatistics.Services
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// Load all t
-        /// </summary>
-        /// <returns></returns>
-        public async Task<List<Game>> LoadAllGamesFromFile()
-        {
-            var fileContent = await LoadFile("all-games");
-            var games = JsonSerializer.Deserialize<SteamResponse>(fileContent);
-
-            return games.Response.Games.ToList();
-        }
-
-        private async Task<string> LoadFile(string filename)
-        {
-            string result = string.Empty;
-
-            try
-            {
-                using var sr = new StreamReader($@"C:\Users\Ellen\Desktop\steamdata\{filename}.json");
-                result = await sr.ReadToEndAsync();
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-
-            return result;
         }
     }
 }
