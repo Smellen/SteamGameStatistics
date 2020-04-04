@@ -6,21 +6,11 @@
 <h1>Steam Index</h1>
 
 <div>
-    <a class="nav-link text-dark" asp-area="" asp-controller="Steam" asp-action="GetPlayer">Steam User</a>
-    <input type="text" id="steamId" name="steamId" />
+    @Html.ActionLink("Get Player", "GetPlayer", "Steam", htmlAttributes: new { @class = "btn btn-labeled btn-info" })
 
-    @using (Html.BeginForm("GetPlayer", "Steam"))
-    {
-        <input type="submit" value="Search" />
-    }
-
-    @using (Html.BeginForm("GetRecentlyPlayedGames", "Steam"))
-    {
-        <input type="submit" value="Get recently played games" />
-    }
+    @Html.ActionLink("Get recently played games", "GetRecentlyPlayedGames", "Steam", htmlAttributes: new { @class = "btn btn-labeled btn-info" })
 
     @Html.ActionLink("All the games!", "DisplayAllGames", "Steam", new { sortOrder = "ac-count" }, htmlAttributes: new { @class = "btn btn-labeled btn-info" })
-
 
     @Html.ActionLink("Load new games again", "LoadAllGames", "Steam", htmlAttributes: new { @class = "btn btn-labeled btn-info" })
 </div>

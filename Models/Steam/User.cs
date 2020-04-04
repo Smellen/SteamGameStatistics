@@ -55,5 +55,21 @@ namespace SteamGameStatistics.Models.Steam
 
         [JsonPropertyName("locstatecode")]
         public string Locstatecode { get; set; }
+
+        public string GetLastLoggedInDate()
+        {
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            dateTime = dateTime.AddSeconds(this.Lastlogoff);
+
+            return dateTime.ToUniversalTime().ToString();
+        }
+
+        public string GetProfileCreateDate()
+        {
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            dateTime = dateTime.AddSeconds(this.Timecreated);
+
+            return dateTime.ToUniversalTime().ToString();
+        }
     }
 }
