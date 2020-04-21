@@ -1,23 +1,29 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SteamGameStatistics.Interfaces;
 using SteamGameStatistics.Models;
+using SteamGameStatistics.Models.Steam;
 
 namespace SteamGameStatistics.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ISteamService _steamService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ISteamService steamService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _steamService = steamService ?? throw new ArgumentNullException(nameof(steamService));
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            User steamUser = await _steamService.GetSteamUser();
+            return View(steamUser);
         }
 
         public IActionResult Privacy()

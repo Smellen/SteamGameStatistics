@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using SteamGameStatistics.Interfaces;
 using SteamGameStatistics.Models.Steam;
 using SteamGameStatistics.Models.Steam.Responses;
@@ -14,14 +16,17 @@ namespace SteamGameStatistics.Services
 {
     public class SteamService : ISteamService
     {
-        private const string SteamKey = "STEAM KEY";
-        private const string SteamId = "STEAM ID";
-
+        private const string EnvironmentKeySteamKey = "SteamKey";
+        private const string EnvironmentKeySteamId = "SteamId";
         public readonly HttpClient _client;
+        public string SteamKey { get; private set; }
+        public string SteamId { get; private set; }
 
         public SteamService(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
+            SteamKey = Environment.GetEnvironmentVariable(EnvironmentKeySteamKey);
+            SteamId = Environment.GetEnvironmentVariable(EnvironmentKeySteamId);
         }
 
         /// <summary>
