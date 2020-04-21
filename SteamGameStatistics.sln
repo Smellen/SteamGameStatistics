@@ -3,7 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src\SteamGameStatistics\SteamGameStatistics", "src\SteamGameStatistics\SteamGameStatistics.csproj", "{09A16D1C-2B5A-4896-880E-CEB486DB4A91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteamGameStatistics", "src\SteamGameStatistics\SteamGameStatistics.csproj", "{09A16D1C-2B5A-4896-880E-CEB486DB4A91}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E4D3B312-2E21-45BD-921E-13E941663A5B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{8D2BDDF9-59D4-4D1A-AE3E-EE3A0881D157}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +25,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{09A16D1C-2B5A-4896-880E-CEB486DB4A91} = {E4D3B312-2E21-45BD-921E-13E941663A5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A9C1ECB1-FA8A-4FDA-8FBD-017AAF682EAE}
