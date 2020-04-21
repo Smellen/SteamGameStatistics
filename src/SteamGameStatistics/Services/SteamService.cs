@@ -5,9 +5,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Web.Mvc;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using SteamGameStatistics.Interfaces;
 using SteamGameStatistics.Models.Steam;
 using SteamGameStatistics.Models.Steam.Responses;
@@ -33,7 +30,6 @@ namespace SteamGameStatistics.Services
         /// Get a steam user.
         /// </summary>
         /// <returns>A steam user.</returns>
-        [OutputCache(Duration = 86400, VaryByParam = "none")]
         public async Task<User> GetSteamUser()
         {
             User user = null;

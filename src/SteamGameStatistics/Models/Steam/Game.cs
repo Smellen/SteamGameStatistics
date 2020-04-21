@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text.Json.Serialization;
-using System.Web.Mvc;
 
 namespace SteamGameStatistics.Models.Steam
 {
@@ -33,13 +32,11 @@ namespace SteamGameStatistics.Models.Steam
         [JsonPropertyName("playtime_linux_forever")]
         public long PlaytimeLinuxForever { get; set; }
 
-        [OutputCache(Duration = 86400, VaryByParam = "none")]
         public string GetIconUrl()
         {
             return $"http://media.steampowered.com/steamcommunity/public/images/apps/{Appid}/{ImgIconUrl}.jpg";
         }
 
-        [OutputCache(Duration = 86400, VaryByParam = "none")]
         public string GetLogoUrl()
         {
             return $"http://media.steampowered.com/steamcommunity/public/images/apps/{Appid}/{ImgLogoUrl}.jpg";
