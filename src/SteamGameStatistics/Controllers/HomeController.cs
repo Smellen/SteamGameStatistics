@@ -23,11 +23,15 @@ namespace SteamGameStatistics.Controllers
         public async Task<IActionResult> Index()
         {
             User steamUser = await _steamService.GetSteamUser();
+
+            _logger.LogInformation($"Steam user loading: {steamUser?.Personaname}");
+
             return View(steamUser);
         }
 
         public IActionResult Privacy()
         {
+            _logger.LogInformation("Loading Privacy");
             return View();
         }
 
