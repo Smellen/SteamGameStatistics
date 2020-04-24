@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SteamGameStatistics.Interfaces;
 using SteamGameStatistics.Services;
 
@@ -20,11 +21,11 @@ namespace SteamGameStatistics
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient<ISteamService, SteamService>();
-            services.AddTransient<IJsonReaderService, JsonReaderService>();
+            services.AddTransient<IFileReaderService, FileReaderService>();
             services.AddControllersWithViews().AddViewComponentsAsServices();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -35,6 +36,7 @@ namespace SteamGameStatistics
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -48,6 +50,8 @@ namespace SteamGameStatistics
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            loggerFactory.AddFile("Logs/mylog-{Date}.txt");
         }
     }
 }

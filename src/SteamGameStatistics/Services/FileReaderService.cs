@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SteamGameStatistics.Interfaces;
 using SteamGameStatistics.Models.Json;
@@ -10,11 +11,18 @@ using SteamGameStatistics.Models.Steam.Responses;
 
 namespace SteamGameStatistics.Services
 {
-    public class JsonReaderService : IJsonReaderService
+    public class FileReaderService : IFileReaderService
     {
         private const string NameSortField = "name";
         private const string AchievementCountSortField = "ac-count";
         private const string AllGamesFileName = "all-games.json";
+
+        private readonly ILogger<FileReaderService> _logger;
+
+        public FileReaderService(ILogger<FileReaderService> logger)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
         /// <summary>
         /// Update this value
@@ -35,8 +43,9 @@ namespace SteamGameStatistics.Services
 
                 steamResponse = System.Text.Json.JsonSerializer.Deserialize<SteamResponse>(fileContent);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occured while reading in a local file.");
                 return null;
             }
 
@@ -50,14 +59,24 @@ namespace SteamGameStatistics.Services
         /// <returns>A list of games.</returns>
         public async Task<List<Game>> LoadGamesWithAchievementsFromFile(string sort)
         {
-            var games = JsonConvert.DeserializeObject<List<Game>>(await File.ReadAllTextAsync(TempFileLocation));
+            List<Game> sortedGames = null;
 
-            var sortedGames = sort switch
+            try
             {
-                NameSortField => games.OrderBy(e => e.Name).ToList(),
-                AchievementCountSortField => games.OrderByDescending(e => e.Achievements.Count).ToList(),
-                _ => games.OrderBy(e => e.Name).ToList(),
-            };
+                var games = JsonConvert.DeserializeObject<List<Game>>(await File.ReadAllTextAsync(TempFileLocation));
+
+                sortedGames = sort switch
+                {
+                    NameSortField => games.OrderBy(e => e.Name).ToList(),
+                    AchievementCountSortField => games.OrderByDescending(e => e.Achievements.Count).ToList(),
+                    _ => games.OrderBy(e => e.Name).ToList(),
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occured while reading in a local file.");
+                return null;
+            }
 
             return sortedGames;
         }

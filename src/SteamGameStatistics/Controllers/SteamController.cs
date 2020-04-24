@@ -2,17 +2,20 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SteamGameStatistics.Interfaces;
 
 namespace SteamGameStatistics.Controllers
 {
     public class SteamController : Controller
     {
+        private readonly ILogger<SteamController> _logger;
         private readonly ISteamService _steamService;
-        private readonly IJsonReaderService _jsonReaderService;
+        private readonly IFileReaderService _jsonReaderService;
 
-        public SteamController(ISteamService steamService, IJsonReaderService jsonService)
+        public SteamController(ILogger<SteamController> logger, ISteamService steamService, IFileReaderService jsonService)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _steamService = steamService ?? throw new ArgumentNullException(nameof(steamService));
             _jsonReaderService = jsonService ?? throw new ArgumentNullException(nameof(jsonService));
         }
@@ -31,6 +34,7 @@ namespace SteamGameStatistics.Controllers
         public async Task<ActionResult> GetRecentlyPlayedGames()
         {
             var games = await _steamService.GetRecentlyPlayedGames();
+
             return View(games);
         }
 
