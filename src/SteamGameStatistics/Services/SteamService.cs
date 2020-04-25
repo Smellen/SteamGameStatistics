@@ -91,6 +91,8 @@ namespace SteamGameStatistics.Services
                     _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
                     var recentlyPlayedGamesResponse = JsonSerializer.Deserialize<SteamResponse>(responseStr);
                     recentlyPlayedGmes = recentlyPlayedGamesResponse.Response.Games.ToList();
+
+                    _cache.Create(CacheKeys.RecentlyPlayedGamesKey, recentlyPlayedGmes);
                 }
             }
             else
