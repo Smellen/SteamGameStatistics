@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamGameStatistics.Enums", "src\SteamGameStatistics.Enums\SteamGameStatistics.Enums.csproj", "{A5147062-7579-471A-8A9A-D27AD0420D7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamGameStatistics.Cache", "SteamGameStatistics.Cache\SteamGameStatistics.Cache.csproj", "{DCC8FAAD-CAF2-4534-8DFE-C77F0AAF6B8B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamGameStatistics.Cache", "src\SteamGameStatistics.Cache\SteamGameStatistics.Cache.csproj", "{DCC8FAAD-CAF2-4534-8DFE-C77F0AAF6B8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

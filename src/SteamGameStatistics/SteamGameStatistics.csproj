@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SteamGameStatistics.Cache\SteamGameStatistics.Cache.csproj" />
+    <ProjectReference Include="..\SteamGameStatistics.Cache\SteamGameStatistics.Cache.csproj" />
     <ProjectReference Include="..\SteamGameStatistics.Enums\SteamGameStatistics.Enums.csproj" />
   </ItemGroup>
 </Project>
