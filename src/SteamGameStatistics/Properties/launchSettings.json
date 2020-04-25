@@ -19,8 +19,8 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-		"SteamId": "76561198064659354",
-        "SteamKey": "789DCCEEBCFAC1AC0967DB3C0365FC68",
+		"SteamId": "<STEAMID>",
+        "SteamKey": "<STEAMKEY>",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
