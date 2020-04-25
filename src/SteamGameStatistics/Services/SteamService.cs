@@ -5,7 +5,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using SteamGameStatistics.Cache;
+using SteamGameStatistics.Enums;
 using SteamGameStatistics.Interfaces;
 using SteamGameStatistics.Models.Steam;
 using SteamGameStatistics.Models.Steam.Responses;
@@ -18,15 +21,18 @@ namespace SteamGameStatistics.Services
         private const string EnvironmentKeySteamId = "SteamId";
 
         private readonly ILogger<SteamService> _logger;
-        public readonly HttpClient _client;
+        private readonly HttpClient _client;
+        private readonly ICacheService _cache;
 
         public string SteamKey { get; private set; }
         public string SteamId { get; private set; }
 
-        public SteamService(ILogger<SteamService> logger, HttpClient client)
+        public SteamService(ILogger<SteamService> logger, HttpClient client, ICacheService cache)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _client = client ?? throw new ArgumentNullException(nameof(client));
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+
             SteamKey = Environment.GetEnvironmentVariable(EnvironmentKeySteamKey);
             SteamId = Environment.GetEnvironmentVariable(EnvironmentKeySteamId);
         }
@@ -38,17 +44,28 @@ namespace SteamGameStatistics.Services
         public async Task<User> GetSteamUser()
         {
             User user = null;
-            var uri = new Uri($"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={SteamKey}&steamids={SteamId}");
 
-            _logger.LogDebug($"Sending GET request for getting Steam user : {uri.AbsoluteUri}");
-
-            var response = await _client.GetAsync(uri);
-            if (response.IsSuccessStatusCode)
+            var cachedUser = _cache.TryGet(CacheKeys.UserKey);
+            if (cachedUser == null)
             {
-                var responseStr = await response.Content.ReadAsStringAsync();
-                _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
-                var userResponse = JsonSerializer.Deserialize<PlayerInformation>(responseStr);
-                user = userResponse.Response.Users.FirstOrDefault();
+                var uri = new Uri($"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={SteamKey}&steamids={SteamId}");
+
+                _logger.LogDebug($"Sending GET request for getting Steam user : {uri.AbsoluteUri}");
+
+                var response = await _client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseStr = await response.Content.ReadAsStringAsync();
+                    _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
+                    var userResponse = JsonSerializer.Deserialize<PlayerInformation>(responseStr);
+                    user = userResponse.Response.Users.FirstOrDefault();
+
+                    _cache.Create(CacheKeys.UserKey, user);
+                }
+            }
+            else
+            {
+                user = cachedUser as User;
             }
 
             return user;
@@ -60,21 +77,29 @@ namespace SteamGameStatistics.Services
         /// <returns>A list of recently played games.</returns>
         public async Task<List<Game>> GetRecentlyPlayedGames()
         {
-            List<Game> games = null;
-            var uri = new Uri($"http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key={SteamKey}&steamid={SteamId}&format=json");
-
-            _logger.LogDebug($"Sending GET request for recently played games : {uri.AbsoluteUri}");
-
-            var response = await _client.GetAsync(uri);
-            if (response.IsSuccessStatusCode)
+            List<Game> recentlyPlayedGmes = null;
+            var cachedRecentlyPlayedGames = _cache.TryGet(CacheKeys.RecentlyPlayedGamesKey);
+            if (cachedRecentlyPlayedGames == null)
             {
-                var responseStr = await response.Content.ReadAsStringAsync();
-                _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
-                var recentlyPlayedGamesResponse = JsonSerializer.Deserialize<SteamResponse>(responseStr);
-                games = recentlyPlayedGamesResponse.Response.Games.ToList();
+                var uri = new Uri($"http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key={SteamKey}&steamid={SteamId}&format=json");
+
+                _logger.LogDebug($"Sending GET request for recently played games : {uri.AbsoluteUri}");
+
+                var response = await _client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseStr = await response.Content.ReadAsStringAsync();
+                    _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
+                    var recentlyPlayedGamesResponse = JsonSerializer.Deserialize<SteamResponse>(responseStr);
+                    recentlyPlayedGmes = recentlyPlayedGamesResponse.Response.Games.ToList();
+                }
+            }
+            else
+            {
+                recentlyPlayedGmes = cachedRecentlyPlayedGames as List<Game>;
             }
 
-            return games;
+            return recentlyPlayedGmes;
         }
 
         /// <summary>

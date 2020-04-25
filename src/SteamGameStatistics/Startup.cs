@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SteamGameStatistics.Cache;
 using SteamGameStatistics.Interfaces;
 using SteamGameStatistics.Services;
 
@@ -20,6 +21,8 @@ namespace SteamGameStatistics
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
+            services.AddTransient<ICacheService, CacheService>();
             services.AddHttpClient<ISteamService, SteamService>();
             services.AddTransient<IFileReaderService, FileReaderService>();
             services.AddControllersWithViews().AddViewComponentsAsServices();
