@@ -19,7 +19,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "SteamId": "<STEAMID>",
+		    "SteamId": "<STEAMID>",
         "SteamKey": "<STEAMKEY>",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
