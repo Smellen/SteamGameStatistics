@@ -24,7 +24,7 @@ namespace SteamGameStatistics
             services.AddMemoryCache();
             services.AddTransient<ICacheService, CacheService>();
             services.AddHttpClient<ISteamService, SteamService>();
-            services.AddTransient<IFileReaderService, FileReaderService>();
+            services.AddTransient<IFileService, FileService>();
             services.AddControllersWithViews().AddViewComponentsAsServices();
         }
 

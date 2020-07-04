@@ -11,9 +11,9 @@ namespace SteamGameStatistics.Controllers
     {
         private readonly ILogger<SteamController> _logger;
         private readonly ISteamService _steamService;
-        private readonly IFileReaderService _jsonReaderService;
+        private readonly IFileService _jsonReaderService;
 
-        public SteamController(ILogger<SteamController> logger, ISteamService steamService, IFileReaderService jsonService)
+        public SteamController(ILogger<SteamController> logger, ISteamService steamService, IFileService jsonService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _steamService = steamService ?? throw new ArgumentNullException(nameof(steamService));
@@ -22,17 +22,24 @@ namespace SteamGameStatistics.Controllers
 
         public ActionResult Index()
         {
+            _logger.LogInformation("Loading the steam controller index.");
+            
             return View();
         }
 
         public async Task<ActionResult> GetPlayer()
         {
             var user = await _steamService.GetSteamUser();
+
+            _logger.LogInformation($"Loading the steam user: {user.Personaname}");
+
             return View(user);
         }
 
         public async Task<ActionResult> GetRecentlyPlayedGames()
         {
+            _logger.LogInformation("Loading recently played games for steam controller.");
+
             var games = await _steamService.GetRecentlyPlayedGames();
 
             return View(games);
@@ -40,12 +47,15 @@ namespace SteamGameStatistics.Controllers
 
         public async Task<ActionResult> DisplayAllGames(string sortOrder)
         {
+            _logger.LogInformation("Loading all games for steam controller.");
             var sortedGames = await _jsonReaderService.LoadGamesWithAchievementsFromFile(sortOrder);
             return View(sortedGames);
         }
 
         public async Task<ActionResult> LoadAllGames()
         {
+            _logger.LogInformation("Loading recently played games for steam controller from file.");
+
             var games = await _jsonReaderService.LoadAllGamesFromFile();
             return View(games.OrderByDescending(e => e.PlaytimeForever).ToList());
         }

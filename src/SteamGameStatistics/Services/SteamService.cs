@@ -89,7 +89,7 @@ namespace SteamGameStatistics.Services
                 {
                     var responseStr = await response.Content.ReadAsStringAsync();
                     _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
-                    var recentlyPlayedGamesResponse = JsonSerializer.Deserialize<SteamResponse>(responseStr);
+                    var recentlyPlayedGamesResponse = JsonSerializer.Deserialize<SteamListOfGamesResponse>(responseStr);
                     recentlyPlayedGmes = recentlyPlayedGamesResponse.Response.Games.ToList();
 
                     _cache.Create(CacheKeys.RecentlyPlayedGamesKey, recentlyPlayedGmes);
@@ -107,41 +107,39 @@ namespace SteamGameStatistics.Services
         /// Gets all games from steam and save the response into a file.
         /// </summary>
         /// <returns>True if the games have been successfully saved to a file.</returns>
-        public async Task<bool> GetAllGamesFromSteam()
+        public async Task<List<OwnedGame>> GetAllGamesFromSteam()
         {
-            var uri = new Uri($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={SteamKey}&steamid={SteamId}&format=json&include_appinfo=true");
-            _logger.LogDebug($"Sending GET request for all played games : {uri.AbsoluteUri}");
+            List<OwnedGame> allOwnedGames = null;
+            var cachedAllOwnedGames = _cache.TryGet(CacheKeys.AllGamesKey);                     
 
-            try
+            if(cachedAllOwnedGames == null)
             {
-                using (HttpResponseMessage response = await _client.GetAsync(uri))
-                using (Stream streamToReadFrom = await response.Content.ReadAsStreamAsync())
+                var uri = new Uri($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={SteamKey}&steamid={SteamId}&format=json&include_appinfo=true");
+
+                _logger.LogDebug($"Sending GET request for all owned games : {uri.AbsoluteUri}");
+
+                var response = await _client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
                 {
-                    _logger.LogDebug($"Response: {response.StatusCode}");
+                    var responseStr = await response.Content.ReadAsStringAsync();
+                    _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
+                    var allOwnedGamesResponse = JsonSerializer.Deserialize<SteamGetAllOwnedGamesResponse>(responseStr);
+                    allOwnedGames = allOwnedGamesResponse.Response.OwnedGames;
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string fileToWriteTo = $"all-games";
-                        using (Stream streamToWriteTo = File.Open(fileToWriteTo, FileMode.Create))
-                        {
-                            await streamToReadFrom.CopyToAsync(streamToWriteTo);
-                        }
-
-                        response.Content = null;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    _cache.Create(CacheKeys.AllGamesKey, allOwnedGames);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex, "An error occured while getting all games from steam.");
-                return false;
+                allOwnedGames = cachedAllOwnedGames as List<OwnedGame>;
             }
 
-            return true;
+            return allOwnedGames;
+        }
+
+        Task<bool> ISteamService.GetAllGamesFromSteam()
+        {
+            throw new NotImplementedException();
         }
     }
 }

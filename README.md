@@ -3,7 +3,6 @@
 This is an MVC application that displays the Steam data that is read in from a JSON file.
 It's a work in progress.
 
-
 ### Usage guide
 1. Use a command line tool to clone the following repo.
     ```csharp

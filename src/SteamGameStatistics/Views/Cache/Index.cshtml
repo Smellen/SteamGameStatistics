@@ -1,0 +1,36 @@
+﻿@model Dictionary<string, object>
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if (Model != null && Model.Count >= 1)
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-responsive">
+            <tr>
+                <th>Cache Key</th>
+                <th>View data</th>
+                <th>Clear data</th>
+            </tr>
+
+            @foreach (var cacheHit in Model)
+            {
+                <tr align="center">
+                    <td>@cacheHit.Key </td>
+                    <td>
+                        @using (Html.BeginForm("DeleteCacheHit", "Cache", new { key = cacheHit.Key }, FormMethod.Post))
+                        {
+                        <button type="submit">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+else
+{
+    <p>No data currently stored in cache.</p>
+}
