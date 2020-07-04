@@ -11,15 +11,15 @@ using SteamGameStatistics.Models.Steam.Responses;
 
 namespace SteamGameStatistics.Services
 {
-    public class FileReaderService : IFileReaderService
+    public class FileService : IFileService
     {
         private const string NameSortField = "name";
         private const string AchievementCountSortField = "ac-count";
         private const string AllGamesFileName = "all-games.json";
 
-        private readonly ILogger<FileReaderService> _logger;
+        private readonly ILogger<FileService> _logger;
 
-        public FileReaderService(ILogger<FileReaderService> logger)
+        public FileService(ILogger<FileService> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -35,13 +35,13 @@ namespace SteamGameStatistics.Services
         /// <returns>A list of all owned games.</returns>
         public async Task<List<Models.Steam.Game>> LoadAllGamesFromFile()
         {
-            SteamResponse steamResponse;
+            SteamListOfGamesResponse steamResponse;
             try
             {
                 using var sr = new StreamReader($@"C:\Users\Ellen\Desktop\steamdata\{AllGamesFileName}");
                 string fileContent = await sr.ReadToEndAsync();
 
-                steamResponse = System.Text.Json.JsonSerializer.Deserialize<SteamResponse>(fileContent);
+                steamResponse = System.Text.Json.JsonSerializer.Deserialize<SteamListOfGamesResponse>(fileContent);
             }
             catch (Exception ex)
             {
@@ -80,7 +80,5 @@ namespace SteamGameStatistics.Services
 
             return sortedGames;
         }
-
-
     }
 }

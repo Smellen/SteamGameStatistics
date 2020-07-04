@@ -2,7 +2,7 @@
 
 namespace SteamGameStatistics.Models.Steam.Responses
 {
-    public class SteamResponse
+    public class SteamListOfGamesResponse
     {
         [JsonPropertyName("response")]
         public ListOfGamesResponse Response { get; set; }
