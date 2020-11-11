@@ -9,7 +9,6 @@
         <table class="table table-bordered table-responsive">
             <tr>
                 <th>Cache Key</th>
-                <th>View data</th>
                 <th>Clear data</th>
             </tr>
 
@@ -17,13 +16,12 @@
             {
                 <tr align="center">
                     <td>@cacheHit.Key </td>
-                    <td>TODO: View button</td>
                     <td>
                         @using (Html.BeginForm("DeleteCacheHit", "Cache", new { key = cacheHit.Key }, FormMethod.Post))
                         {
-                        <button type="submit">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
-                        </button>
+                            <button type="submit" id="deleteCacheButton" onclick="return confirm('Are you sure?')">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
                         }
                     </td>
                 </tr>
