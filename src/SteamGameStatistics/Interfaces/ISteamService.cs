@@ -8,6 +8,6 @@ namespace SteamGameStatistics.Interfaces
     {
         Task<User> GetSteamUser();
         Task<List<Game>> GetRecentlyPlayedGames();
-        Task<bool> GetAllGamesFromSteam();
+        Task<List<OwnedGame>> GetAllGamesFromSteam();
     }
 }

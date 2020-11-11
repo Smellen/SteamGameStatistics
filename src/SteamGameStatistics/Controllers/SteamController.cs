@@ -48,7 +48,17 @@ namespace SteamGameStatistics.Controllers
         public async Task<ActionResult> DisplayAllGames(string sortOrder)
         {
             _logger.LogInformation("Loading all games for steam controller.");
-            var sortedGames = await _jsonReaderService.LoadGamesWithAchievementsFromFile(sortOrder);
+            var sortedGames = await _steamService.GetAllGamesFromSteam();
+
+            if(sortOrder == "name")
+            {
+                sortedGames = sortedGames.OrderBy(e => e.Name).ToList();
+            }
+            else if (sortOrder == "tpt")
+            {
+                sortedGames = sortedGames.OrderByDescending(e => e.TotalPlaytime).ToList();
+            }
+
             return View(sortedGames);
         }
 

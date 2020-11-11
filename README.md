@@ -4,6 +4,8 @@ This is an MVC application that displays the Steam data that is read in from a J
 It's a work in progress.
 
 ### Usage guide
+Before running the application the steam user key and the steam id need to be loaded into the environment variables.
+
 1. Use a command line tool to clone the following repo.
     ```csharp
     git clone https://github.com/Smellen/SteamGameStatistics.git
