@@ -21,5 +21,21 @@
     else
     {
         <h1>No user found.</h1>
+
+        <ol>
+            <li>The Steam id is the user unique identifier within Steam. It can be found by looking at the source on a Steam profile. To see user data the data privacy settings need to be Public. </li>
+            <li>The Steam key is used to authentication requests to the Steam API. Keys can be aquired here with a Steam login: https://steamcommunity.com/dev/apikey</li>
+        </ol>
+
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+        {
+            <label for="steamId">SteamId:</label>
+            <input type="text" id="steamId" name="steamId">
+
+            <label for="steamKey">SteamKey:</label>
+            <input type="text" id="steamKey" name="steamKey">
+
+            <button type="submit" class="btn btn-labeled btn-info">Subscribe</button>
+        }
     }
 </div>

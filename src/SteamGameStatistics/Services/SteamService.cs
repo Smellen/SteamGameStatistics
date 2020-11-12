@@ -15,24 +15,20 @@ namespace SteamGameStatistics.Services
 {
     public class SteamService : ISteamService
     {
-        private const string EnvironmentKeySteamKey = "SteamKey";
-        private const string EnvironmentKeySteamId = "SteamId";
-
         private readonly ILogger<SteamService> _logger;
         private readonly HttpClient _client;
         private readonly ICacheService _cache;
+        private readonly IEnvironmentVariablesService _environmentVariablesService;
 
         public string SteamKey { get; private set; }
         public string SteamId { get; private set; }
 
-        public SteamService(ILogger<SteamService> logger, HttpClient client, ICacheService cache)
+        public SteamService(ILogger<SteamService> logger, HttpClient client, ICacheService cache, IEnvironmentVariablesService environmentVariablesService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
-
-            SteamKey = Environment.GetEnvironmentVariable(EnvironmentKeySteamKey);
-            SteamId = Environment.GetEnvironmentVariable(EnvironmentKeySteamId);
+            _environmentVariablesService = environmentVariablesService ?? throw new ArgumentNullException(nameof(environmentVariablesService));
         }
 
         /// <summary>
@@ -41,6 +37,8 @@ namespace SteamGameStatistics.Services
         /// <returns>A steam user.</returns>
         public async Task<User> GetSteamUser()
         {
+            SetEnvironmentVariables();
+
             User user = null;
 
             var cachedUser = _cache.TryGet(CacheKeys.UserKey);
@@ -75,6 +73,8 @@ namespace SteamGameStatistics.Services
         /// <returns>A list of recently played games.</returns>
         public async Task<List<Game>> GetRecentlyPlayedGames()
         {
+            SetEnvironmentVariables();
+
             List<Game> recentlyPlayedGmes = null;
             var cachedRecentlyPlayedGames = _cache.TryGet(CacheKeys.RecentlyPlayedGamesKey);
             if (cachedRecentlyPlayedGames == null)
@@ -108,10 +108,12 @@ namespace SteamGameStatistics.Services
         /// <returns>True if the games have been successfully saved to a file.</returns>
         public async Task<List<OwnedGame>> GetAllGamesFromSteam()
         {
-            List<OwnedGame> allOwnedGames = null;
-            var cachedAllOwnedGames = _cache.TryGet(CacheKeys.AllGamesKey);                     
+            SetEnvironmentVariables();
 
-            if(cachedAllOwnedGames == null)
+            List<OwnedGame> allOwnedGames = null;
+            var cachedAllOwnedGames = _cache.TryGet(CacheKeys.AllGamesKey);
+
+            if (cachedAllOwnedGames == null)
             {
                 var uri = new Uri($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={SteamKey}&steamid={SteamId}&format=json&include_appinfo=true");
 
@@ -134,6 +136,12 @@ namespace SteamGameStatistics.Services
             }
 
             return allOwnedGames;
+        }
+
+        private void SetEnvironmentVariables()
+        {
+            SteamKey = _environmentVariablesService.GetSteamKey();
+            SteamId = _environmentVariablesService.GetSteamId();
         }
     }
 }
