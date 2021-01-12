@@ -18,9 +18,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteamGameStatistics.Cache",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{16057BA9-7EBD-4FE2-AFD6-2DB38798B432}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamGameStatistics.UnitTests", "test\SteamGameStatistics.UnitTests\SteamGameStatistics.UnitTests.csproj", "{5AD42298-8877-4677-8FBE-6CD62D39CF73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteamGameStatistics.UnitTests", "test\SteamGameStatistics.UnitTests\SteamGameStatistics.UnitTests.csproj", "{5AD42298-8877-4677-8FBE-6CD62D39CF73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamGameStatistics.Cache.UnitTests", "test\SteamGameStatistics.Cache.UnitTests\SteamGameStatistics.Cache.UnitTests.csproj", "{4C4DAFB7-D795-4ADA-8F01-832146D715E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteamGameStatistics.Cache.UnitTests", "test\SteamGameStatistics.Cache.UnitTests\SteamGameStatistics.Cache.UnitTests.csproj", "{4C4DAFB7-D795-4ADA-8F01-832146D715E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamGameStatistics.Data", "src\SteamGameStatistics.Data\SteamGameStatistics.Data.csproj", "{C7556340-E66D-42DA-9019-73061D632CF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +50,10 @@ Global
 		{4C4DAFB7-D795-4ADA-8F01-832146D715E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C4DAFB7-D795-4ADA-8F01-832146D715E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C4DAFB7-D795-4ADA-8F01-832146D715E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7556340-E66D-42DA-9019-73061D632CF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7556340-E66D-42DA-9019-73061D632CF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7556340-E66D-42DA-9019-73061D632CF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7556340-E66D-42DA-9019-73061D632CF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +64,7 @@ Global
 		{DCC8FAAD-CAF2-4534-8DFE-C77F0AAF6B8B} = {E4D3B312-2E21-45BD-921E-13E941663A5B}
 		{5AD42298-8877-4677-8FBE-6CD62D39CF73} = {16057BA9-7EBD-4FE2-AFD6-2DB38798B432}
 		{4C4DAFB7-D795-4ADA-8F01-832146D715E5} = {16057BA9-7EBD-4FE2-AFD6-2DB38798B432}
+		{C7556340-E66D-42DA-9019-73061D632CF5} = {E4D3B312-2E21-45BD-921E-13E941663A5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A9C1ECB1-FA8A-4FDA-8FBD-017AAF682EAE}
