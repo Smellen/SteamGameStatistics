@@ -22,7 +22,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteamGameStatistics.UnitTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteamGameStatistics.Cache.UnitTests", "test\SteamGameStatistics.Cache.UnitTests\SteamGameStatistics.Cache.UnitTests.csproj", "{4C4DAFB7-D795-4ADA-8F01-832146D715E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamGameStatistics.Data", "src\SteamGameStatistics.Data\SteamGameStatistics.Data.csproj", "{C7556340-E66D-42DA-9019-73061D632CF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteamGameStatistics.Data", "src\SteamGameStatistics.Data\SteamGameStatistics.Data.csproj", "{C7556340-E66D-42DA-9019-73061D632CF5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteamGameStatistics.Application", "src\SteamGameStatistics.Application\SteamGameStatistics.Application.csproj", "{E9DEA86E-0731-45CB-B54C-DE8645FEF453}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamGameStatistics.Domain", "src\SteamGameStatistics.Domain\SteamGameStatistics.Domain.csproj", "{FA8AFE3F-CB10-4F55-A72B-058AF8CF7563}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +58,14 @@ Global
 		{C7556340-E66D-42DA-9019-73061D632CF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7556340-E66D-42DA-9019-73061D632CF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7556340-E66D-42DA-9019-73061D632CF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9DEA86E-0731-45CB-B54C-DE8645FEF453}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9DEA86E-0731-45CB-B54C-DE8645FEF453}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9DEA86E-0731-45CB-B54C-DE8645FEF453}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9DEA86E-0731-45CB-B54C-DE8645FEF453}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA8AFE3F-CB10-4F55-A72B-058AF8CF7563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA8AFE3F-CB10-4F55-A72B-058AF8CF7563}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA8AFE3F-CB10-4F55-A72B-058AF8CF7563}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA8AFE3F-CB10-4F55-A72B-058AF8CF7563}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +77,8 @@ Global
 		{5AD42298-8877-4677-8FBE-6CD62D39CF73} = {16057BA9-7EBD-4FE2-AFD6-2DB38798B432}
 		{4C4DAFB7-D795-4ADA-8F01-832146D715E5} = {16057BA9-7EBD-4FE2-AFD6-2DB38798B432}
 		{C7556340-E66D-42DA-9019-73061D632CF5} = {E4D3B312-2E21-45BD-921E-13E941663A5B}
+		{E9DEA86E-0731-45CB-B54C-DE8645FEF453} = {E4D3B312-2E21-45BD-921E-13E941663A5B}
+		{FA8AFE3F-CB10-4F55-A72B-058AF8CF7563} = {E4D3B312-2E21-45BD-921E-13E941663A5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A9C1ECB1-FA8A-4FDA-8FBD-017AAF682EAE}

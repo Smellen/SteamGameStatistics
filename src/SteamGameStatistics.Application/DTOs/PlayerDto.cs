@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace SteamGameStatistics.Models.Steam
+namespace SteamGameStatistics.Application.DTOs
 {
-    public class User
+    public class PlayerDto
     {
         [JsonPropertyName("steamid")]
         public string Steamid { get; set; }
@@ -31,6 +31,9 @@ namespace SteamGameStatistics.Models.Steam
 
         [JsonPropertyName("avatarfull")]
         public Uri Avatarfull { get; set; }
+
+        [JsonPropertyName("avatarhash")]
+        public string AvatarHash { get; set; }
 
         [JsonPropertyName("lastlogoff")]
         public long Lastlogoff { get; set; }

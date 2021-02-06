@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SteamGameStatistics.Cache;
 using SteamGameStatistics.Data;
+using SteamGameStatistics.Domain.Interfaces;
+using SteamGameStatistics.Domain.Services;
 using SteamGameStatistics.Interfaces;
 using SteamGameStatistics.Services;
 
@@ -15,6 +17,7 @@ namespace SteamGameStatistics
     public class Startup
     {
         private const string HealthEndpoint = "/health";
+        private const string DatabaseConnectionName = "database";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -24,13 +27,18 @@ namespace SteamGameStatistics
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks()
+                .AddSqlServer(Configuration.GetConnectionString(DatabaseConnectionName));
             services.AddMemoryCache();
+            services.AddTransient<IPlayerService, PlayerService>();
+            services.AddTransient<IPlayerRepository, PlayerRepository>();
             services.AddTransient<ICacheService, CacheService>();
             services.AddHttpClient<ISteamService, SteamService>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<IEnvironmentVariablesService, EnvironmentVariablesService>();
             services.AddDbContext<GameDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("database")));
+                options.UseSqlServer(Configuration.GetConnectionString(DatabaseConnectionName)));
+            services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddControllersWithViews().AddViewComponentsAsServices();
         }
 
@@ -46,8 +54,6 @@ namespace SteamGameStatistics
                 app.UseHsts();
             }
 
-            app.UseHealthChecks(HealthEndpoint, "success");
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -60,6 +66,7 @@ namespace SteamGameStatistics
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHealthChecks(HealthEndpoint);
             });
 
             loggerFactory.AddFile("Logs/mylog-{Date}.txt");

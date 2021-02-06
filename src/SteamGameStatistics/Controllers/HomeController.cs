@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SteamGameStatistics.Application.DTOs;
+using SteamGameStatistics.Domain.Interfaces;
 using SteamGameStatistics.Interfaces;
 using SteamGameStatistics.Models;
 using SteamGameStatistics.Models.Steam;
@@ -12,12 +14,14 @@ namespace SteamGameStatistics.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IPlayerService _playerService;
         private readonly ISteamService _steamService;
         private readonly IEnvironmentVariablesService _environmentVariablesService;
 
-        public HomeController(ILogger<HomeController> logger, ISteamService steamService, IEnvironmentVariablesService environmentVariablesService)
+        public HomeController(ILogger<HomeController> logger, IPlayerService playerService, ISteamService steamService, IEnvironmentVariablesService environmentVariablesService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _playerService = playerService ?? throw new ArgumentNullException(nameof(playerService));
             _steamService = steamService ?? throw new ArgumentNullException(nameof(steamService));
             _environmentVariablesService = environmentVariablesService ?? throw new ArgumentNullException(nameof(environmentVariablesService));
         }
@@ -29,7 +33,12 @@ namespace SteamGameStatistics.Controllers
                 SetEnvironmentVariables(steamId, steamKey);
             }
 
-            User steamUser = await _steamService.GetSteamUser();
+            PlayerDto steamUser = await _playerService.GetPlayer(steamId);
+            if (steamUser == null)
+            {
+                steamUser = await _steamService.GetSteamUser();
+                await _playerService.AddPlayer(steamUser);
+            }
 
             _logger.LogInformation($"Steam user loading: {steamUser?.Personaname}");
 
