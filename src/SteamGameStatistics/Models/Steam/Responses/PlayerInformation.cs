@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using SteamGameStatistics.Application.DTOs;
 
 namespace SteamGameStatistics.Models.Steam.Responses
 {
@@ -11,6 +12,6 @@ namespace SteamGameStatistics.Models.Steam.Responses
     public class PlayerInformationResponse
     {
         [JsonPropertyName("players")]
-        public User[] Users { get; set; }
+        public PlayerDto[] Users { get; set; }
     }
 }
