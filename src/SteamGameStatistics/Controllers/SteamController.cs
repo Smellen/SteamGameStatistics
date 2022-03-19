@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SteamGameStatistics.Domain.Interfaces;
-using SteamGameStatistics.Interfaces;
 
 namespace SteamGameStatistics.Controllers
 {
@@ -12,13 +10,11 @@ namespace SteamGameStatistics.Controllers
     {
         private readonly ILogger<SteamController> _logger;
         private readonly ISteamService _steamService;
-        private readonly IFileService _jsonReaderService;
 
-        public SteamController(ILogger<SteamController> logger, ISteamService steamService, IFileService jsonService)
+        public SteamController(ILogger<SteamController> logger, ISteamService steamService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _steamService = steamService ?? throw new ArgumentNullException(nameof(steamService));
-            _jsonReaderService = jsonService ?? throw new ArgumentNullException(nameof(jsonService));
         }
 
         public ActionResult Index()
@@ -65,10 +61,7 @@ namespace SteamGameStatistics.Controllers
 
         public async Task<ActionResult> LoadAllGames()
         {
-            _logger.LogInformation("Loading recently played games for steam controller from file.");
-
-            var games = await _jsonReaderService.LoadAllGamesFromFile();
-            return View(games.OrderByDescending(e => e.PlaytimeForever).ToList());
+            throw new NotImplementedException();
         }
     }
 }

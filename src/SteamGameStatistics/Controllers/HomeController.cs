@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SteamGameStatistics.Application.DTOs;
 using SteamGameStatistics.Domain.Interfaces;
-using SteamGameStatistics.Interfaces;
 using SteamGameStatistics.Models;
 
 namespace SteamGameStatistics.Controllers

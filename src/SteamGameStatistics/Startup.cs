@@ -9,8 +9,6 @@ using SteamGameStatistics.Cache;
 using SteamGameStatistics.Data;
 using SteamGameStatistics.Domain.Interfaces;
 using SteamGameStatistics.Domain.Services;
-using SteamGameStatistics.Interfaces;
-using SteamGameStatistics.Services;
 
 namespace SteamGameStatistics
 {
