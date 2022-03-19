@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
+using SteamGameStatistics.Domain.Interfaces;
 using SteamGameStatistics.Enums;
-using SteamGameStatistics.Interfaces;
 
-namespace SteamGameStatistics.Services
+namespace SteamGameStatistics.Domain.Services
 {
-    public class EnvironmentVariablesService : IEnvironmentVariablesService
+    public  class EnvironmentVariablesService : IEnvironmentVariablesService
     {
         private readonly ILogger<EnvironmentVariablesService> _logger;
 
@@ -24,18 +24,29 @@ namespace SteamGameStatistics.Services
             return Environment.GetEnvironmentVariable(EnvironmentVariables.SteamKey);
         }
 
-        public bool SetSteamId(string steamId)
+        public string SetSteamId(string steamId)
         {
+            if (string.IsNullOrEmpty(steamId))
+            {
+                steamId = this.GetSteamId();
+            }
+
             _logger.LogInformation($"Setting {steamId} as the steam id to use.");
             Environment.SetEnvironmentVariable(EnvironmentVariables.SteamId, steamId);
-            return GetSteamId() == steamId;
+
+            return steamId;
         }
 
-        public bool SetSteamKey(string steamKey)
+        public string SetSteamKey(string steamKey)
         {
+            if (string.IsNullOrEmpty(steamKey))
+            {
+                steamKey = this.GetSteamKey();
+            }
+
             _logger.LogInformation($"Setting {steamKey} as the steam key to use.");
             Environment.SetEnvironmentVariable(EnvironmentVariables.SteamKey, steamKey);
-            return GetSteamKey() == steamKey;
+            return steamKey;
         }
     }
 }

@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SteamGameStatistics.Application.DTOs;
-using SteamGameStatistics.Interfaces;
-using SteamGameStatistics.Models.Steam;
-using SteamGameStatistics.Models.Steam.Responses;
+using SteamGameStatistics.Domain.Interfaces;
 
-namespace SteamGameStatistics.Services
+namespace SteamGameStatistics.Domain.Services
 {
     public class SteamService : ISteamService
     {
@@ -26,6 +23,8 @@ namespace SteamGameStatistics.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _environmentVariablesService = environmentVariablesService ?? throw new ArgumentNullException(nameof(environmentVariablesService));
+
+            SetEnvironmentVariables();
         }
 
         /// <summary>
@@ -34,8 +33,6 @@ namespace SteamGameStatistics.Services
         /// <returns>A steam user.</returns>
         public async Task<PlayerDto> GetSteamUser()
         {
-            SetEnvironmentVariables();
-
             PlayerDto user = null;
 
             var uri = new Uri($"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={SteamKey}&steamids={SteamId}");
@@ -47,7 +44,7 @@ namespace SteamGameStatistics.Services
             {
                 var responseStr = await response.Content.ReadAsStringAsync();
                 _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
-                var userResponse = JsonSerializer.Deserialize<PlayerInformation>(responseStr);
+                var userResponse = JsonSerializer.Deserialize<PlayerResponseDto>(responseStr);
                 user = userResponse.Response.Users.FirstOrDefault();
 
             }
@@ -59,53 +56,51 @@ namespace SteamGameStatistics.Services
         /// Gets the recently played games.
         /// </summary>
         /// <returns>A list of recently played games.</returns>
-        public async Task<List<Game>> GetRecentlyPlayedGames()
-        {
-            SetEnvironmentVariables();
+        //public async Task<List<Game>> GetRecentlyPlayedGames()
+        //{
+        //    List<Game> recentlyPlayedGmes = null;
+        //    var uri = new Uri($"http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key={SteamKey}&steamid={SteamId}&format=json");
 
-            List<Game> recentlyPlayedGmes = null;
-            ;
-            var uri = new Uri($"http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key={SteamKey}&steamid={SteamId}&format=json");
+        //    _logger.LogDebug($"Sending GET request for recently played games : {uri.AbsoluteUri}");
 
-            _logger.LogDebug($"Sending GET request for recently played games : {uri.AbsoluteUri}");
+        //    var response = await _client.GetAsync(uri);
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        var responseStr = await response.Content.ReadAsStringAsync();
+        //        _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
+        //        var recentlyPlayedGamesResponse = JsonSerializer.Deserialize<SteamListOfGamesResponse>(responseStr);
+        //        if (recentlyPlayedGamesResponse.Response.TotalCount != 0 && recentlyPlayedGamesResponse.Response.Games != null)
+        //        {
+        //            recentlyPlayedGmes = recentlyPlayedGamesResponse.Response.Games.ToList();
+        //        }
+        //    }
 
-            var response = await _client.GetAsync(uri);
-            if (response.IsSuccessStatusCode)
-            {
-                var responseStr = await response.Content.ReadAsStringAsync();
-                _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
-                var recentlyPlayedGamesResponse = JsonSerializer.Deserialize<SteamListOfGamesResponse>(responseStr);
-                recentlyPlayedGmes = recentlyPlayedGamesResponse.Response.Games.ToList();
-            }
-
-            return recentlyPlayedGmes;
-        }
+        //    return recentlyPlayedGmes;
+        //}
 
         /// <summary>
         /// Gets all games from steam and save the response into a file.
         /// </summary>
         /// <returns>True if the games have been successfully saved to a file.</returns>
-        public async Task<List<OwnedGame>> GetAllGamesFromSteam()
-        {
-            SetEnvironmentVariables();
+        //public async Task<List<OwnedGame>> GetAllGamesFromSteam()
+        //{
+        //    List<OwnedGame> allOwnedGames = null;
 
-            List<OwnedGame> allOwnedGames = null;
+        //    var uri = new Uri($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={SteamKey}&steamid={SteamId}&format=json&include_appinfo=true");
 
-            var uri = new Uri($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={SteamKey}&steamid={SteamId}&format=json&include_appinfo=true");
+        //    _logger.LogDebug($"Sending GET request for all owned games : {uri.AbsoluteUri}");
 
-            _logger.LogDebug($"Sending GET request for all owned games : {uri.AbsoluteUri}");
+        //    var response = await _client.GetAsync(uri);
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        var responseStr = await response.Content.ReadAsStringAsync();
+        //        _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
+        //        var allOwnedGamesResponse = JsonSerializer.Deserialize<SteamGetAllOwnedGamesResponse>(responseStr);
+        //        allOwnedGames = allOwnedGamesResponse.Response.OwnedGames;
+        //    }
 
-            var response = await _client.GetAsync(uri);
-            if (response.IsSuccessStatusCode)
-            {
-                var responseStr = await response.Content.ReadAsStringAsync();
-                _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
-                var allOwnedGamesResponse = JsonSerializer.Deserialize<SteamGetAllOwnedGamesResponse>(responseStr);
-                allOwnedGames = allOwnedGamesResponse.Response.OwnedGames;
-            }
-
-            return allOwnedGames;
-        }
+        //    return allOwnedGames;
+        //}
 
         private void SetEnvironmentVariables()
         {

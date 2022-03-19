@@ -17,9 +17,13 @@ namespace SteamGameStatistics.Domain.Services
 
         public async Task<PlayerDto> AddPlayer(PlayerDto player)
         {
-            var addedPlayer = await _playerRepository.AddPlayer(player);
+            var exists = await this.GetPlayer(player.Steamid);
+            if(exists == null)
+            {
+                player = await _playerRepository.AddPlayer(player);
+            }
 
-            return addedPlayer;
+            return player;
         }
 
         public async Task<PlayerDto> GetPlayer(string steamId)

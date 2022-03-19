@@ -7,7 +7,6 @@ using SteamGameStatistics.Application.DTOs;
 using SteamGameStatistics.Domain.Interfaces;
 using SteamGameStatistics.Interfaces;
 using SteamGameStatistics.Models;
-using SteamGameStatistics.Models.Steam;
 
 namespace SteamGameStatistics.Controllers
 {
@@ -17,6 +16,8 @@ namespace SteamGameStatistics.Controllers
         private readonly IPlayerService _playerService;
         private readonly ISteamService _steamService;
         private readonly IEnvironmentVariablesService _environmentVariablesService;
+        protected string SteamId { get; set; }
+        protected string SteamKey { get; set; }
 
         public HomeController(ILogger<HomeController> logger, IPlayerService playerService, ISteamService steamService, IEnvironmentVariablesService environmentVariablesService)
         {
@@ -28,12 +29,12 @@ namespace SteamGameStatistics.Controllers
 
         public async Task<IActionResult> Index(string steamId, string steamKey)
         {
-            if (!string.IsNullOrEmpty(steamId) || !string.IsNullOrEmpty(steamKey))
+            if (string.IsNullOrEmpty(steamId) || string.IsNullOrEmpty(steamKey))
             {
                 SetEnvironmentVariables(steamId, steamKey);
             }
 
-            PlayerDto steamUser = await _playerService.GetPlayer(steamId);
+            PlayerDto steamUser = await _playerService.GetPlayer(SteamId);
             if (steamUser == null)
             {
                 steamUser = await _steamService.GetSteamUser();
@@ -59,8 +60,8 @@ namespace SteamGameStatistics.Controllers
 
         private void SetEnvironmentVariables(string steamId, string steamKey)
         {
-            _environmentVariablesService.SetSteamId(steamId);
-            _environmentVariablesService.SetSteamKey(steamKey);
+            SteamId = _environmentVariablesService.SetSteamId(steamId);
+            SteamKey = _environmentVariablesService.SetSteamKey(steamKey);
         }
     }
 }

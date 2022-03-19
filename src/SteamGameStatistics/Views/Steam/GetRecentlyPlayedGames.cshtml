@@ -4,6 +4,11 @@
     ViewData["Title"] = "GetRecentlyPlayedGames";
 }
 
+@Html.Partial("_SteamBack")
+
+@if(Model != null)
+{
+
 <div class="table-responsive">
     <h4>List of recently played games</h4>
     <hr />
@@ -27,3 +32,8 @@
 
     </table>
 </div>
+}
+else
+{
+    <h3>This user has no recently played games.</h3>
+}

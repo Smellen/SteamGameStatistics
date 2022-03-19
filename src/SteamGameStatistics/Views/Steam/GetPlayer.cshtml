@@ -1,10 +1,12 @@
-﻿@model SteamGameStatistics.Models.Steam.User
+﻿@model SteamGameStatistics.Application.DTOs.PlayerDto
 
 @{
     ViewData["Title"] = "SteamUser";
     var lastLogin = Model.GetLastLoggedInDate();
     var profileCreated = Model.GetProfileCreateDate();
 }
+
+@Html.Partial("_SteamBack")
 
 @if (Model != null)
 {

@@ -23,7 +23,20 @@ Before running the application the steam user key and the steam id need to be lo
     ```csharp
     ./setSteamEnvironmentValues.ps1 <steamKey> <steamId>
     ```
-4. Run the application.
+
+4. There is a docker compose file for creating a database that can be used. If a separate database is used, update the appsettings otherwise run the following command.
+   ```
+   cd ..\..\docker\
+   docker-compose up
+   ```
+
+5. For creating the database run the following command in Package Console Manager. 
+   Leave the Default project as src\SteamGameStatistics
+    ```
+    Update-Database
+    ```
+
+6. Run the application.
     ```csharp
     dotnet run
     ```

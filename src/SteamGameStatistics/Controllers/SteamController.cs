@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SteamGameStatistics.Domain.Interfaces;
 using SteamGameStatistics.Interfaces;
 
 namespace SteamGameStatistics.Controllers
@@ -40,26 +41,26 @@ namespace SteamGameStatistics.Controllers
         {
             _logger.LogInformation("Loading recently played games for steam controller.");
 
-            var games = await _steamService.GetRecentlyPlayedGames();
+            //var games = await _steamService.GetRecentlyPlayedGames();
 
-            return View(games);
+            return View(null);
         }
 
         public async Task<ActionResult> DisplayAllGames(string sortOrder)
         {
             _logger.LogInformation("Loading all games for steam controller.");
-            var sortedGames = await _steamService.GetAllGamesFromSteam();
+            //var sortedGames = await _steamService.GetAllGamesFromSteam();
 
-            if(sortOrder == "name")
-            {
-                sortedGames = sortedGames.OrderBy(e => e.Name).ToList();
-            }
-            else if (sortOrder == "tpt")
-            {
-                sortedGames = sortedGames.OrderByDescending(e => e.TotalPlaytime).ToList();
-            }
+            //if(sortOrder == "name")
+            //{
+            //    sortedGames = sortedGames.OrderBy(e => e.Name).ToList();
+            //}
+            //else if (sortOrder == "tpt")
+            //{
+            //    sortedGames = sortedGames.OrderByDescending(e => e.TotalPlaytime).ToList();
+            //}
 
-            return View(sortedGames);
+            return View(null);
         }
 
         public async Task<ActionResult> LoadAllGames()
