@@ -6,10 +6,10 @@ using SteamGameStatistics.Application.DTOs;
 
 namespace SteamGameStatistics.Domain.Interfaces
 {
-    public  interface ISteamService
+    public interface IGameRepository
     {
-        Task<PlayerDto> GetSteamUser();
-        Task<List<GameDto>> GetRecentlyPlayedGames();
-       // Task<List<OwnedGame>> GetAllGamesFromSteam();
+        Task<GameDto> AddGame(GameDto game);
+        Task<GameDto> GetGame(long appId);
+        Task<bool> RemoveGame(GameDto game);
     }
 }

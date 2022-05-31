@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
@@ -14,15 +15,17 @@ namespace SteamGameStatistics.Domain.Services
         private readonly ILogger<SteamService> _logger;
         private readonly HttpClient _client;
         private readonly IEnvironmentVariablesService _environmentVariablesService;
+        private readonly IGameRepository _gameRepository;
 
         public string SteamKey { get; private set; }
         public string SteamId { get; private set; }
 
-        public SteamService(ILogger<SteamService> logger, HttpClient client, IEnvironmentVariablesService environmentVariablesService)
+        public SteamService(ILogger<SteamService> logger, HttpClient client, IEnvironmentVariablesService environmentVariablesService, IGameRepository gameRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _environmentVariablesService = environmentVariablesService ?? throw new ArgumentNullException(nameof(environmentVariablesService));
+            _gameRepository = gameRepository ?? throw new ArgumentNullException(nameof(gameRepository));
 
             SetEnvironmentVariables();
         }
@@ -56,27 +59,35 @@ namespace SteamGameStatistics.Domain.Services
         /// Gets the recently played games.
         /// </summary>
         /// <returns>A list of recently played games.</returns>
-        //public async Task<List<Game>> GetRecentlyPlayedGames()
-        //{
-        //    List<Game> recentlyPlayedGmes = null;
-        //    var uri = new Uri($"http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key={SteamKey}&steamid={SteamId}&format=json");
+        public async Task<List<GameDto>> GetRecentlyPlayedGames()
+        {
+            List<GameDto> recentlyPlayedGmes = null;
+            var uri = new Uri($"http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key={SteamKey}&steamid={SteamId}&format=json");
 
-        //    _logger.LogDebug($"Sending GET request for recently played games : {uri.AbsoluteUri}");
+            _logger.LogDebug($"Sending GET request for recently played games : {uri.AbsoluteUri}");
 
-        //    var response = await _client.GetAsync(uri);
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        var responseStr = await response.Content.ReadAsStringAsync();
-        //        _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
-        //        var recentlyPlayedGamesResponse = JsonSerializer.Deserialize<SteamListOfGamesResponse>(responseStr);
-        //        if (recentlyPlayedGamesResponse.Response.TotalCount != 0 && recentlyPlayedGamesResponse.Response.Games != null)
-        //        {
-        //            recentlyPlayedGmes = recentlyPlayedGamesResponse.Response.Games.ToList();
-        //        }
-        //    }
+            var response = await _client.GetAsync(uri);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseStr = await response.Content.ReadAsStringAsync();
+                _logger.LogDebug($"Response: {response.StatusCode} - {responseStr}");
+                var recentlyPlayedGamesResponse = JsonSerializer.Deserialize<RecentlyPlayedResponseDto>(responseStr);
+                if (recentlyPlayedGamesResponse.Response.Count != 0 && recentlyPlayedGamesResponse.Response.Games != null)
+                {
+                    recentlyPlayedGmes = recentlyPlayedGamesResponse.Response.Games.ToList();
+                }
 
-        //    return recentlyPlayedGmes;
-        //}
+                foreach(var game in recentlyPlayedGmes)
+                {
+                    if (await _gameRepository.GetGame(game.AppId) == null)
+                    {
+                        await _gameRepository.AddGame(game);
+                    }
+                }
+            }
+
+            return recentlyPlayedGmes;
+        }
 
         /// <summary>
         /// Gets all games from steam and save the response into a file.

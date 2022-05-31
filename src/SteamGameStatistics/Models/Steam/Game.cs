@@ -11,9 +11,6 @@ namespace SteamGameStatistics.Models.Steam
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("playtime_2weeks")]
-        public long Playtime2Weeks { get; set; }
-
         [JsonPropertyName("playtime_forever")]
         public long PlaytimeForever { get; set; }
 
@@ -45,12 +42,6 @@ namespace SteamGameStatistics.Models.Steam
         public string GetTotalGamePlaytime()
         {
             TimeSpan time = TimeSpan.FromMinutes(PlaytimeForever);
-            return $"{Math.Round(time.TotalHours, 2)} hours";
-        }
-
-        public string GetLastTwoWeeksPlaytime()
-        {
-            TimeSpan time = TimeSpan.FromMinutes(Playtime2Weeks);
             return $"{Math.Round(time.TotalHours, 2)} hours";
         }
     }

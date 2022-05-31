@@ -37,9 +37,9 @@ namespace SteamGameStatistics.Controllers
         {
             _logger.LogInformation("Loading recently played games for steam controller.");
 
-            //var games = await _steamService.GetRecentlyPlayedGames();
+            var games = await _steamService.GetRecentlyPlayedGames();
 
-            return View(null);
+            return View(games);
         }
 
         public async Task<ActionResult> DisplayAllGames(string sortOrder)

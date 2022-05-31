@@ -30,6 +30,7 @@ namespace SteamGameStatistics
             services.AddMemoryCache();
             services.AddTransient<IPlayerService, PlayerService>();
             services.AddTransient<IPlayerRepository, PlayerRepository>();
+            services.AddTransient<IGameRepository, GameRepository>();
             services.AddTransient<ICacheService, CacheService>();
             services.AddHttpClient<ISteamService, SteamService>();
             services.AddTransient<IFileService, FileService>();

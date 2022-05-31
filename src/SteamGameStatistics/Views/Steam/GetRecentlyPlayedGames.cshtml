@@ -1,4 +1,4 @@
-﻿@model List<SteamGameStatistics.Models.Steam.Game>
+﻿@model List<SteamGameStatistics.Application.DTOs.GameDto>
 
 @{
     ViewData["Title"] = "GetRecentlyPlayedGames";
@@ -23,9 +23,9 @@
         @foreach (var game in Model)
         {
             <tr>
-                <td>@game.Appid</td>
+                <td>@game.AppId</td>
                 <td>@game.Name</td>
-                <td>@game.PlaytimeForever</td>
+                <td>@game.Playtime</td>
                 <td><img src="@Url.Content(game.GetIconUrl())"></td>
             </tr>
         }

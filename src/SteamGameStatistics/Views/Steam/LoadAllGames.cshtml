@@ -25,9 +25,6 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                Last two weeks playtime
-            </th>
-            <th>
                 Total Playtime
             </th>
             <th>
@@ -44,9 +41,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @item.GetLastTwoWeeksPlaytime()
                 </td>
                 <td>
                     @item.GetTotalGamePlaytime()
