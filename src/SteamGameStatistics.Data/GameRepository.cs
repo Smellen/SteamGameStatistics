@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SteamGameStatistics.Application.DTOs;
 using SteamGameStatistics.Data.DAOs;
@@ -11,20 +8,42 @@ using SteamGameStatistics.Domain.Interfaces;
 
 namespace SteamGameStatistics.Data
 {
-    public class GameRepository : IGameRepository
+    public class GameRepository(GameDbContext context) : IGameRepository
     {
-        private readonly IMapper _mapper;
-        private readonly GameDbContext _context;
+        private readonly GameDbContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
-        public GameRepository(IMapper mapper, GameDbContext context)
+        private GameDao MapGameDTOtoGameDAO(GameDto game)
         {
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            return new()
+            {
+                AppId = game.AppId,
+                Name = game.Name,
+                Playtime = game.Playtime,
+                IconUrl = game.IconUrl,
+                WindowsPlaytime = game.WindowsPlaytime,
+                MacPlaytime = game.MacPlaytime,
+                LinuxPlaytime = game.LinuxPlaytime
+            };
+        }
+
+        private GameDto MapGameDAOtoGameDTO(GameDao game)
+        {
+            return new ()
+            {
+                
+                AppId = game.AppId,
+                Name = game.Name,
+                Playtime = game.Playtime,
+                IconUrl = game.IconUrl,
+                WindowsPlaytime = game.WindowsPlaytime,
+                MacPlaytime = game.MacPlaytime,
+                LinuxPlaytime = game.LinuxPlaytime
+            };
         }
 
         public async Task<GameDto> AddGame(GameDto game)
         {
-            var gameToBeAdded = _mapper.Map<GameDao>(game);
+            var gameToBeAdded = MapGameDTOtoGameDAO(game);
             await _context.Games.AddAsync(gameToBeAdded);
             await _context.SaveChangesAsync();
             _context.Entry(gameToBeAdded).State = EntityState.Detached;
@@ -36,12 +55,12 @@ namespace SteamGameStatistics.Data
         {
             var game = await _context.Games.AsNoTracking().SingleOrDefaultAsync(e => e.AppId.Equals(appId));
 
-            return game == null ? null : _mapper.Map<GameDto>(game);
+            return game == null ? null : MapGameDAOtoGameDTO(game);
         }
 
         public async Task<bool> RemoveGame(GameDto game)
         {
-            var gameToBeRemoved = _mapper.Map<GameDao>(game);
+            var gameToBeRemoved = MapGameDTOtoGameDAO(game);
             _context.Games.Remove(gameToBeRemoved);
             await _context.SaveChangesAsync();
 

@@ -37,7 +37,6 @@ namespace SteamGameStatistics
             services.AddTransient<IEnvironmentVariablesService, EnvironmentVariablesService>();
             services.AddDbContext<GameDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString(DatabaseConnectionName)));
-            services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddControllersWithViews().AddViewComponentsAsServices();
         }
 
